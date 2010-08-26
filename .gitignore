@@ -1,0 +1,6 @@
+doc/build/
+doc/source/c.txt
+doc/source/python.txt
+.*.swo
+.*.swp
+*~
