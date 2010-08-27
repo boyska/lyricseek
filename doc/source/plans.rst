@@ -1,5 +1,10 @@
-Plans for the project
+Plans for the library
 =====================
+
+.. note ::
+  
+  None of this has been implemented yet. See :doc:`status` for more
+  informations
 
 This is a sort of project of what the library should look like when finished.
 
@@ -7,14 +12,17 @@ This is a sort of project of what the library should look like when finished.
 * Low, if not none, dependencies
 * There is a simple but powerful api
 
-  * get_lyrics(artist='foo', album='asd', title='xyz', otherinfo='this', timeout=10)
+  * ``get_lyrics(artist='foo', album='asd', title='xyz', otherinfo='this', timeout=10)``
     Just do it.
-  * get_lyrics_fastest(... as above ...)
+  * ``get_lyrics_fastest(... as above ...)``
     The first site to give an 'OK' will return
-  * get_lyrics_best(... as above ...)
+  * ``get_lyrics_best(... as above ...)``
     Try to catch as much information as possible
-  * get_lyrics_all(... as above ...)
-    Return all results (useful for user selection)
+  * ``get_lyrics_all(... as above ...)``
+    Return all results (useful for user selection) *
+  * ``get_lyrics(filename='/path/to/file.mp3, id3=True)`` will automatically
+    discover album, artist, title information using file metadata. This will
+    work, however, only if eyed3 is installed
 
 * It's not limited to lyrics, but supports artist info, cover, tabs, whatsoever
 * Extensibility is provided through eggs
@@ -33,6 +41,10 @@ This is a sort of project of what the library should look like when finished.
 	  (it is especially useful because there will probably some plugin behaving
 	  badly, and we don't want it to ruin our work). 
 	  And, yeah, there is timeout, but it's not a complete solution
+  
+  * .. seealso ::
+        
+        Section on :ref:`retrievers`
 
 * A command*line utility provides the same functionalities 
 
@@ -40,3 +52,37 @@ This is a sort of project of what the library should look like when finished.
 
 * A C library that wraps the python one
 
+.. _retrievers:
+
+Retrievers
+----------
+
+.. highlight:: python
+
+A retriever is an object that can fetch lyrics, coverart or other stuff.
+It is a class with a lot of metadata about his capabilities (optional),
+and one mandatory static method, ``get_data``
+
+No subclassing is required, only conventional class attributes are needed.
+
+Let's see an example::
+
+    class FooRetriever(object):
+        name = 'Foo will do'
+        retrieves = ('lyrics', 'coverart')
+
+        @staticmethod
+        def get_data(song_metadata, options)
+
+The more interesting part is ``get_data``: here all the fetching part is done.
+Both his tho arguments, ``song_metadata`` and ``options`` are dict.
+``song_metadata`` has four main fields: ``artist``, ``title``, ``album``,
+``filename``. Some of them could be None.
+``options`` has currently only one field, but it may grow:
+
+* ``searching`` A tuple containing what the user wants (similar to retrieves).
+  It can be useful to reduce time: suppose, for example, that your function can
+  fetch both lyrics and coverart, but is slow on the latter. If the user is
+  only searching lyrics, there's no need to fetch coverart
+
+To know how to create a retriever plugin, read :doc:`plugin_howto`

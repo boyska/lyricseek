@@ -14,6 +14,7 @@ Contents:
    plans
    status
    reference
+   plugin_howto
    
 
 Indices and tables
