@@ -9,7 +9,8 @@ TODO:
 .. todolist::
 
 Needing documentation
-=====================
+---------------------
 
 .. include :: python.txt
+  :start-after: ========
 
