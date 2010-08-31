@@ -1,4 +1,4 @@
 API Reference
 =============
-.. automodule :: test_mod
+.. automodule :: get_lyrics
   :members:
