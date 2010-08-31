@@ -4,3 +4,5 @@ doc/source/python.txt
 .*.swo
 .*.swp
 *~
+*.pyc
+*.pyo
