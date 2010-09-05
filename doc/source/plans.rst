@@ -28,7 +28,7 @@ This is a sort of project of what the library should look like when finished.
 * Extensibility is provided through eggs
 
   * see http://base-art.net/Articles/64/ (only useful if you already know eggs)
-  * plugin can be separate packages
+  * plugin are separate packages
   * any package can contain entrypoint for our library
   * each plugin is called a Retriever
 
@@ -86,3 +86,9 @@ Both his tho arguments, ``song_metadata`` and ``options`` are dict.
   only searching lyrics, there's no need to fetch coverart
 
 To know how to create a retriever plugin, read :doc:`plugin_howto`
+
+setup.py
+~~~~~~~~
+The ``setup.py`` we'll put into the plugin skeleton should be slightly modified
+to make it more "automatic": the entrypoint name should automatically be
+equal to ``Retriever.name``
