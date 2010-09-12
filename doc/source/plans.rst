@@ -69,7 +69,7 @@ Let's see an example::
 
     class FooRetriever(object):
         name = 'Foo will do'
-        retrieves = ('lyrics', 'coverart')
+        features = ('lyrics', 'coverart')
 
         @staticmethod
         def get_data(song_metadata, options)
@@ -80,7 +80,7 @@ Both his tho arguments, ``song_metadata`` and ``options`` are dict.
 ``filename``. Some of them could be None.
 ``options`` has currently only one field, but it may grow:
 
-* ``searching`` A tuple containing what the user wants (similar to retrieves).
+* ``searching`` A tuple containing what the user wants (similar to features).
   It can be useful to reduce time: suppose, for example, that your function can
   fetch both lyrics and coverart, but is slow on the latter. If the user is
   only searching lyrics, there's no need to fetch coverart

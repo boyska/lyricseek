@@ -1,6 +1,7 @@
 doc/build/
 doc/source/c.txt
 doc/source/python.txt
+doc/source/undoc.pickle
 .*.swo
 .*.swp
 *~
