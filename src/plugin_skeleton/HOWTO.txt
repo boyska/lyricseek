@@ -1,0 +1,19 @@
+QUICK PLUGIN HOWTO
+==================
+
+You are reading the HOWTO.txt of the plugin skeleton.
+Now, suppose you want to create the retriever ``FoozaRetriever``, that can
+get lyrics
+You should customize a bit this:
+
+1. change the name of the package dir
+    ``mv MyRetriever FoozaRetriever``
+
+2. edit ``retriever.py`` inside that directory. You have to change:
+    
+    * class name. from ``class MyRetriever`` to ``class FoozaRetriever``
+    * the name field. from ``name = 'My Retriever`` to ``name = 'Fooza Retriever'``
+    * the features field: from ``features = ()`` to ``features = ('lyrics')``
+    * Write working code in ``get_data``
+
+That's it!

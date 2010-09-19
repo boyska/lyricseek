@@ -1,3 +1,6 @@
+src/plugin_skeleton/build
+src/plugin_skeleton/dist
+src/plugin_skeleton/*.egg-info
 doc/build/
 doc/source/c.txt
 doc/source/python.txt

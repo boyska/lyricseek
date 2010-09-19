@@ -89,6 +89,8 @@ To know how to create a retriever plugin, read :doc:`plugin_howto`
 
 setup.py
 ~~~~~~~~
-The ``setup.py`` we'll put into the plugin skeleton should be slightly modified
-to make it more "automatic": the entrypoint name should automatically be
-equal to ``Retriever.name``
+The ``setup.py`` you'll find into the plugin skeleton is slightly modified
+to make it more "automatic": the entrypoint name is equal to ``Retriever.name``,
+and attempts are done to autoconfigure it.
+If you have a complex file structure, or defines other classes than the Retriver one, it will probably fail.
+It should be easy, anyway, to configure it!

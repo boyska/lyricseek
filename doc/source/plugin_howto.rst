@@ -1,15 +1,15 @@
 Plugin HOWTO
 ============
 
-You should (but is still TODO) find a "plugin skeleton": it consists of a
-``setup.py`` plus the "real" plugin file.
+You will find a "plugin skeleton": it consists of a
+``setup.py`` plus the "real" plugin directory.
 
 The plugin is basicly a class with a lot of metadata and one (static)method.
 You should just fill-in metadata and code your method as you prefer.
 
 To use the plugin, we use the egg system: for you, this means that you have to
 build a "distribution" (a .egg file) for your plugin.
-You can do it with ``python setup.py bdist``.
+You can do it with ``python setup.py bdist_egg``.
 Then, anyone can install it using ``easy_install``.
 
 Development mode
@@ -22,6 +22,8 @@ sort of link, so that you won't need to reinstall it.
 
 Testing it easy
 ---------------
+.. todo :: this has not been done
+
 The skeleton should contain a basic command-line interface to test your plugin.
 This will eliminate the need to use the library to test it.
 
