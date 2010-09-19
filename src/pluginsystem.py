@@ -19,12 +19,28 @@ def load_plugins():
             continue
         plugin = entrypoint.load()
         #do some checks
-        if not hasattr(plugin, 'features') or not plugin.features or\
-                not hasattr(plugin, 'get_data') or not hasattr(plugin, 'name'):
-            print 'WARNING: plugin "%s" doesn\'t comply to the interface.'\
-                    ' Not loading it'
-            continue
+        _check_plugin(plugin)
         plugins[entrypoint.name] = plugin
+
+
+def _check_plugin(plugin):
+    '''Perform some sanity checks'''
+    if not hasattr(plugin, 'features') or not plugin.features or\
+            not hasattr(plugin, 'get_data') or not hasattr(plugin, 'name'):
+        print 'WARNING: plugin "%s" doesn\'t comply to the interface.'\
+                ' Not loading it' % plugin.name
+        return False
+    return True
+
+
+def register_plugin(name, plugin):
+    '''
+    .. warning :: This is only intended for debug or dirty h4x.
+        If unsure, you shouldn't use this
+
+    Register a plugin. Useful to add Retrievers without packing proper eggs
+    '''
+    plugins[name] = plugin
 
 
 def get_plugins():
