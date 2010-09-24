@@ -2,23 +2,25 @@
 Main module: provide simple, ready-to-use functions
 to get lyrics
 '''
+import functools
 
 import pluginsystem
 
 
-def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
+def get_ready_retrievers(artist=None, album=None, title=None, otherinfo=None, \
         request=(), timeout=-1, filename=None):
     '''
-    Simply get_lyrics
+    .. note :: this is not meant to be used by the casual user. Use it if
+      you are a developer or if you really do what you're doing
+    This function will return an iterator over functions that take no arguments
+    and will try to get data (that is, retrievers with arguments filled in)
 
-    .. todo :: use multiprocessing
     :param otherinfo: Other metadata, not worthing a function parameter
     :type otherinfo: dict
     :param request: all needed metadata. If empty, all will be searched
     :type request: tuple
     :param timeout: currently not supported
-    :returns: all the metadata found, as a type:value dict
-    :rtype: dict
+    :rtype: iterator
     '''
     song_metadata = otherinfo if otherinfo else {}
     if artist:
@@ -31,10 +33,29 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
     options = {}
     options['searching'] = request or ('lyrics', 'coverart')
 
-    res = {}
     for name, plugin in pluginsystem.get_plugins().items():
+        yield name, functools.partial(plugin.get_data, song_metadata, options)
+    return
+
+
+def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
+        request=(), timeout=-1, filename=None):
+    '''
+    .. todo :: use multiprocessing
+    Simply get lyrics
+
+    :param otherinfo: Other metadata, not worthing a function parameter
+    :type otherinfo: dict
+    :param request: all needed metadata. If empty, all will be searched
+    :type request: tuple
+    :param timeout: currently not supported
+    :rtype: dict
+    '''
+    res = {}
+    for name, retriever in get_ready_retrievers(artist, album, title, \
+            otherinfo, request, timeout, filename):
         try:
-            result = plugin.get_data(song_metadata, options)
+            result = retriever()
         except:
             print 'WARNING! Plugin %s raised an exception' % name
         else:
