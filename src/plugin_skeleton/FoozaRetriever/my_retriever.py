@@ -6,6 +6,3 @@ class MyRetriever(object):
     def get_data(song_metadata, option):
         # Edit me!!
         raise NotImplementedError()
-
-def get_data():
-    return 'asd'
