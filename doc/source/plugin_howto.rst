@@ -22,10 +22,11 @@ sort of link, so that you won't need to reinstall it.
 
 Testing it easy
 ---------------
-.. todo :: this has not been done
 
-The skeleton should contain a basic command-line interface to test your plugin.
-This will eliminate the need to use the library to test it.
+.. todo ::
+
+  The skeleton should contain a basic command-line interface to test your plugin.
+  This will eliminate the need to use the library to test it.
 
 Dependencies
 ------------

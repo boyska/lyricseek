@@ -16,11 +16,15 @@ This is a sort of project of what the library should look like when finished.
     Just do it.
   * ``get_lyrics_fastest(... as above ...)``
     The first site to give an 'OK' will return
-  * ``get_lyrics_best(... as above ...)``
+  * .. todo :: ``get_lyrics_best(... as above ...)``
+
     Try to catch as much information as possible
-  * ``get_lyrics_all(... as above ...)``
+  * .. todo :: ``get_lyrics_all(... as above ...)``
+
     Return all results (useful for user selection) *
-  * ``get_lyrics(filename='/path/to/file.mp3, id3=True)`` will automatically
+  * .. todo :: ``get_lyrics(filename='/path/to/file.mp3, id3=True)`` 
+    
+    will automatically
     discover album, artist, title information using file metadata. This will
     work, however, only if eyed3 is installed
 
@@ -32,7 +36,7 @@ This is a sort of project of what the library should look like when finished.
   * any package can contain entrypoint for our library
   * each plugin is called a Retriever
 
-* Retrievers run concurrently, results analysis is performed real*time
+* .. todo :: Retrievers run concurrently, results analysis is performed real*time
 
   * This way we can take "the fastest", or wait for the best
   * An asyncronous API should be provided
@@ -46,11 +50,11 @@ This is a sort of project of what the library should look like when finished.
         
         Section on :ref:`retrievers`
 
-* A command*line utility provides the same functionalities 
+* .. todo :: A command*line utility provides the same functionalities 
 
   * Different outputs (human, colour, parseable)
 
-* A C library that wraps the python one
+* .. todo :: A C library that wraps the python one
 
 .. _retrievers:
 
