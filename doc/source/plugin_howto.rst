@@ -23,11 +23,10 @@ sort of link, so that you won't need to reinstall it.
 Testing it easy
 ---------------
 
-.. todo ::
-
-  The skeleton should contain a basic command-line interface to test your plugin.
-  This will eliminate the need to use the library to test it.
+The skeleton contain a basic command-line interface to test your plugin.
+This will eliminate the need to use the library to test it.
 
 Dependencies
 ------------
+
 If your plugin has any dependencies, you should write this in ``setup.py``.
