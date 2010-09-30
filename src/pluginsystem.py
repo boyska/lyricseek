@@ -1,6 +1,8 @@
 '''
 This module provides access to plugins, metadata and other tools
 '''
+import types
+
 import pkg_resources
 
 plugins = {}  # name:class
@@ -26,9 +28,11 @@ def load_plugins():
 def _check_plugin(plugin):
     '''Perform some sanity checks'''
     if not hasattr(plugin, 'features') or not plugin.features or\
-            not hasattr(plugin, 'get_data') or not hasattr(plugin, 'name'):
+            not type(plugin.features) in (types.TupleType, types.ListType) or\
+            not hasattr(plugin, 'get_data') or not hasattr(plugin, 'name')\
+            or not plugin.name or not type(plugin.name) is str:
         print 'WARNING: plugin "%s" doesn\'t comply to the interface.'\
-                ' Not loading it' % plugin.name
+                ' Not loading it' % plugin
         return False
     return True
 
@@ -47,6 +51,8 @@ def register_plugin(name, plugin):
     :arg plugin: the Retriever class implementing your plugin (must implement
       the interface described in :ref:`retrievers`
     '''
+    if not _check_plugin(plugin):
+        raise ValueError("Plugin check failed")
     plugins[name] = plugin
 
 
