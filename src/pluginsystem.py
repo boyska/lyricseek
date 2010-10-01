@@ -42,14 +42,14 @@ def register_plugin(name, plugin):
     .. warning :: This is only intended for debug or dirty h4x.
         If unsure, you shouldn't use this
 
-    .. todo :: Check plugin and raise ValueError
-
     Register a plugin. Useful to add Retrievers without packing proper eggs
 
     :arg name: The name of the plugin. In the standard case, this is the name
       of the entrypoint
     :arg plugin: the Retriever class implementing your plugin (must implement
       the interface described in :ref:`retrievers`
+
+    :raises ValueError: If the check on the plugin fails
     '''
     if not _check_plugin(plugin):
         raise ValueError("Plugin check failed")
