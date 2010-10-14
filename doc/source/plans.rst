@@ -3,8 +3,8 @@ Plans for the library
 
 .. note ::
   
-  None of this has been implemented yet. See :doc:`status` for more
-  informations
+  Not all of this has been implemented yet. See :doc:`status` for more
+  informations. Pretty much everything that hasn't the *todo* status is done
 
 This is a sort of project of what the library should look like when finished.
 
@@ -36,7 +36,7 @@ This is a sort of project of what the library should look like when finished.
   * any package can contain entrypoint for our library
   * each plugin is called a Retriever
 
-* .. todo :: Retrievers run concurrently, results analysis is performed real*time
+* Retrievers run concurrently, results analysis is performed real*time
 
   * This way we can take "the fastest", or wait for the best
   * An asyncronous API should be provided
