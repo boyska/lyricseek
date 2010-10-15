@@ -2,6 +2,8 @@ import time
 import sys
 
 from nose.tools import timed, raises
+from nose.plugins.attrib import attr
+
 
 sys.path.append('..')
 import get_lyrics
@@ -29,6 +31,16 @@ class Quick:
     def get_data(*args, **kwargs):
         print 'quick ended'
         return{'foo': 'quick foo'}
+
+
+class QuickBar:
+    name = 'quick_bar'
+    features = ('foo',)
+
+    @staticmethod
+    def get_data(*args, **kwargs):
+        print 'quick_bar ended'
+        return{'bar': 'quickBar bar'}
 
 
 class Error:
@@ -77,6 +89,16 @@ class TestGetLyrics:
                 analyzer='first_match')
         assert res[0] == 'quick'
 
+    def test_first_advanced_match(self):
+        '''first match should "compose" results'''
+        pluginsystem.register_plugin('quick', Quick)
+        pluginsystem.register_plugin('quickbar', QuickBar)
+        res = get_lyrics.get_lyrics('a', 'b', request=('foo', 'bar'),
+                analyzer='first_match')
+        assert res[0] is not None
+        assert 'bar' in res[1]
+        assert 'foo' in res[1]
+
     @every_parallel
     def test_first_dont_match(self):
         'first match should not match results that do not satisfies request'
@@ -85,6 +107,7 @@ class TestGetLyrics:
                 analyzer='first_match')
         assert res[0] == None
 
+    @attr('slow')
     @every_parallel
     def test_slow_if_no_matches(self):
         "when no matches are found, slowness is ok"
@@ -95,6 +118,7 @@ class TestGetLyrics:
                 analyzer='first_match')
         assert time.time() - start > 1.0
 
+    @attr('slow')
     @every_parallel
     def test_timeout(self):
         "Timeout must do its job"

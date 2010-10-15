@@ -75,16 +75,18 @@ def _get_analyzer(name):
 def _first_match(request, results, response):
     '''
     This analyzer checks only for the first result that satisfies the request.
-
-    .. todo :: If resultA+resultB satisfies request, they should be returned
     '''
+    current_best = {}
     while True:
         name, status, res = results.get()
         if status != 'ok':
-            pass
+            continue
+        for key, value in res.items():
+            if key not in current_best:
+                current_best[key] = value
         #request is satisfied
-        elif False not in (x in res.keys() for x in request):
-            response.put((name, res))
+        if False not in (x in current_best.keys() for x in request):
+            response.put((name, current_best))
             return
         else:
             print 'nooo', res, request, [x in res for x in request]
