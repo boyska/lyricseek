@@ -43,6 +43,17 @@ class QuickBar:
         return{'bar': 'quickBar bar'}
 
 
+class Trackable:
+    name = 'trackable'
+    features = ('bar',)
+    called = False
+
+    @staticmethod
+    def get_data(*args, **kwargs):
+        Trackable.called = True
+        return {'bar': 'tracked bar'}
+
+
 class Error:
     name = 'error'
     features = ('foo',)
@@ -79,7 +90,6 @@ class TestParallelism:
 
 class TestGetLyrics:
     def setUp(self):
-        print 'setting up'
         #make sure that there are no registered plugins
         pluginsystem.plugins.clear()
 
@@ -120,9 +130,8 @@ class TestGetLyrics:
     def test_slow_if_no_matches(self):
         "when no matches are found, slowness is ok"
         pluginsystem.register_plugin('slow', Slow)
-        pluginsystem.register_plugin('quick', Quick)
         start = time.time()
-        res = get_lyrics.get_lyrics('a', 'b', request=('donthaveit'),
+        res = get_lyrics.get_lyrics('a', 'b', request=('foo',),
                 analyzer='first_match')
         assert time.time() - start > 1.0
 
@@ -176,3 +185,11 @@ class TestGetLyrics:
         print 'result', res
         assert 'foo' in res[1]
         assert 'bar' not in res[1]
+
+    def test_useless_are_not_called(self):
+        '''Retrievers which don't provide requested data are not called'''
+        pluginsystem.register_plugin('slow', Slow)
+        pluginsystem.register_plugin('trackable', Trackable)
+        get_lyrics.get_lyrics('a', 'b', request=('foo',), timeout=0.3)
+        time.sleep(0.2)
+        assert Trackable.called == False

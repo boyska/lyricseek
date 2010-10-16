@@ -56,7 +56,9 @@ def get_ready_retrievers(artist=None, album=None, title=None, otherinfo=None, \
     options['searching'] = request or ('lyrics', 'coverart')
 
     for name, plugin in pluginsystem.get_plugins().items():
-        yield name, functools.partial(plugin.get_data, song_metadata, options)
+        if set(plugin.features).intersection(set(request)):
+            yield name, functools.partial(
+                    plugin.get_data, song_metadata, options)
     return
 
 
