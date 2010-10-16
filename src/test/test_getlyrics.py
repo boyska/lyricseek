@@ -78,6 +78,15 @@ class TestParallelism:
 
 
 class TestGetLyrics:
+    def setUp(self):
+        print 'setting up'
+        #make sure that there are no registered plugins
+        pluginsystem.plugins.clear()
+
+    def tearDown(self):
+        #make sure that there are no registered plugins
+        pluginsystem.plugins.clear()
+
     @every_parallel
     @timed(.5)
     def test_first_match(self):
