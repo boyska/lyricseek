@@ -3,6 +3,7 @@ Main module: provide simple, ready-to-use functions
 to get lyrics
 '''
 import functools
+import time
 import multiprocessing
 from multiprocessing import dummy as _multiprocdummy
 import Queue
@@ -149,6 +150,7 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
     def waiter(q):
         '''wait for every retriever to join, then unlock main flow'''
         finished.join()  # when every process has done
+        time.sleep(0.5)
         response.put('finished')
     w = multiprocessing.Process(target=waiter, args=(finished,))
     w.daemon = True
