@@ -101,14 +101,13 @@ class TestGetLyrics:
     def test_first_advanced_match(self):
         '''first match should "compose" results'''
         pluginsystem.register_plugin('quick', Quick)
-        pluginsystem.register_plugin('quickbar', QuickBar)
+        pluginsystem.register_plugin('quick_bar', QuickBar)
         res = get_lyrics.get_lyrics('a', 'b', request=('foo', 'bar'),
                 analyzer='first_match')
         assert res[0] is not None
         assert 'bar' in res[1]
         assert 'foo' in res[1]
 
-    @every_parallel
     def test_first_dont_match(self):
         'first match should not match results that do not satisfies request'
         pluginsystem.register_plugin('quick', Quick)
@@ -146,3 +145,34 @@ class TestGetLyrics:
         '''Even when retrievers raise, all is fine'''
         pluginsystem.register_plugin('error', Error)
         get_lyrics.get_lyrics('a', 'b')
+
+    @every_parallel
+    def test_best_found(self):
+        '''first_match must found the "best", even if not perfect'''
+        pluginsystem.register_plugin('slow', Slow)
+        pluginsystem.register_plugin('quick_bar', QuickBar)
+        res = get_lyrics.get_lyrics('a', 'b', request=('foo', 'bar'),
+                timeout=0.5)
+        assert res[0] is not None
+        assert 'bar' in res[1]
+        assert 'foo' not in res[1]
+
+    @every_parallel
+    def test_noone_is_fast_enough(self):
+        '''when no retriever is fast enough, (None, None) should be returned'''
+        pluginsystem.register_plugin('slow', Slow)
+        res = get_lyrics.get_lyrics('a', 'b', request=('foo',),
+                timeout=0.2)
+        print 'NOONE', res
+        assert res[0] is None
+        assert res[1] is None
+
+    @attr('slow')
+    def test_no_extra(self):
+        '''Don't return anything that is not requested'''
+        pluginsystem.register_plugin('slow', Slow)
+        pluginsystem.register_plugin('quick_bar', QuickBar)
+        res = get_lyrics.get_lyrics('a', 'b', request=('foo',))
+        print 'result', res
+        assert 'foo' in res[1]
+        assert 'bar' not in res[1]

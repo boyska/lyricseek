@@ -73,7 +73,7 @@ def _get_analyzer(name):
         raise ValueError('%s is not a valid analyzer')
 
 
-def _first_match(request, results, response):
+def _first_match(request, results, response, best):
     '''
     This analyzer checks only for the first result that satisfies the request.
     '''
@@ -83,21 +83,25 @@ def _first_match(request, results, response):
         if status != 'ok':
             continue
         for key, value in res.items():
-            if key not in current_best:
+            if key not in current_best and key in request:
                 current_best[key] = value
+        if best.empty():
+            best.put(current_best)
+        else:
+            best.put(current_best)
+            best.get()
         #request is satisfied
         if False not in (x in current_best.keys() for x in request):
             response.put((name, current_best))
             return
         else:
-            print 'nooo', res, request, [x in res for x in request]
+            print 'nooo', res, request, [x in res for x in request],\
+                    current_best
 
 
 def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
         request=(), timeout=None, filename=None, analyzer='first_match'):
     '''
-    .. todo :: analyzers should have a way of keeping a "best-for-now" result
-
     Simply get lyrics
 
     :param otherinfo: Other metadata, not worthing a function parameter
@@ -115,8 +119,9 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
     #in a separate process
     finished = multiprocessing.JoinableQueue()
 
+    best = multiprocessing.Queue()
     analyzer = multiprocessing.Process(target=_get_analyzer(analyzer),
-            args=(request, results, response))
+            args=(request, results, response, best))
     analyzer.name = 'analyzer'
     analyzer.daemon = True
     analyzer.start()
@@ -159,8 +164,17 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
     try:
         res = response.get(block=True, timeout=timeout)
     except Queue.Empty:
-        return (None, None)
+        print 'no response'
+        try:
+            best_res = best.get_nowait()
+        except Queue.Empty:
+            return (None, None)
+        else:
+            print 'best I found:', best_res
+            return ('best', best_res)
     else:
         if res == 'finished':
+            print 'finished, nothing found'
             return (None, None)
+        print 'we got', res
         return res
