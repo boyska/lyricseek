@@ -3,7 +3,6 @@ Main module: provide simple, ready-to-use functions
 to get lyrics
 '''
 import functools
-import time
 import multiprocessing
 from multiprocessing import dummy as _multiprocdummy
 import Queue
@@ -81,7 +80,14 @@ def _first_match(request, results, response, best):
     '''
     current_best = {}
     while True:
-        name, status, res = results.get()
+        result = results.get()
+        if result == 'finished':
+            if current_best:
+                response.put((' ', current_best))
+            else:
+                response.put((None, None))
+            return
+        name, status, res = result
         if status != 'ok':
             continue
         for key, value in res.items():
@@ -113,7 +119,10 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
     :param timeout: timeout in seconds, None for no timeout
     :rtype: dict
     '''
+    # retrievers write in results; when every retriever has finished, waiter
+    # write in results; analyzer read from results
     results = multiprocessing.Queue()
+    # analyzer write in response, main process read (with optional timeout)
     response = multiprocessing.Queue()
     #this is a trick; finished will be filled with useless value, one per
     #process. When a process exits, it will pop. So, finished.join() is
@@ -121,6 +130,8 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
     #in a separate process
     finished = multiprocessing.JoinableQueue()
 
+    # even worse trick: every "improvement" analyzer does is written here,
+    # and it tries to be the only value, so that main thread can just get()
     best = multiprocessing.Queue()
     analyzer = multiprocessing.Process(target=_get_analyzer(analyzer),
             args=(request, results, response, best))
@@ -154,12 +165,11 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
         p.name = name
         p.start()
 
-    def waiter(q):
+    def waiter(q, res):
         '''wait for every retriever to join, then unlock main flow'''
-        finished.join()  # when every process has done
-        time.sleep(0.5)
-        response.put('finished')
-    w = multiprocessing.Process(target=waiter, args=(finished,))
+        q.join()  # when every process has done
+        res.put('finished')
+    w = multiprocessing.Process(target=waiter, args=(finished, results))
     w.daemon = True
     w.start()
 
@@ -175,8 +185,4 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
             print 'best I found:', best_res
             return ('best', best_res)
     else:
-        if res == 'finished':
-            print 'finished, nothing found'
-            return (None, None)
-        print 'we got', res
         return res
