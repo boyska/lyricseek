@@ -15,4 +15,4 @@ if __name__ == '__main__':
             type(cls) is types.TypeType and name.endswith('Retriever')][0]
     artist = sys.argv[1]
     song = sys.argv[2]
-    retr.get_data({'title':song, 'artist': artist}, {})
+    retr.get_data({'title': song, 'artist': artist}, {})

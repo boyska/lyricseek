@@ -26,11 +26,11 @@ def autodetect():
         else:
             print "ERROR! Can't detect retriever file (too many files)"
             sys.exit(1)
-    retr = getattr( __import__(dirs[0], fromlist=(retriever_file[:-3],)),
+    retr = getattr(__import__(dirs[0], fromlist=(retriever_file[:-3],)),
             retriever_file[:-3])
     exposed = [obj for obj in dir(retr) \
             if not obj.startswith('_') and\
-            type(getattr(retr,obj)) is types.TypeType]
+            type(getattr(retr, obj)) is types.TypeType]
     if len(exposed) == 1:
         retr_class = getattr(retr, exposed[0])
     else:
