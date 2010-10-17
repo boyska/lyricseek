@@ -100,7 +100,7 @@ class TestGetLyrics:
     @every_parallel
     @timed(.5)
     def test_first_match(self):
-        'first match analyzer should choose the quickest, and do it quick'
+        '''first match analyzer should choose the quickest, and do it quick'''
         #TODO: change to a more explicit, analyzer-choosing API
         pluginsystem.register_plugin(Quick)
         pluginsystem.register_plugin(Slow)
@@ -118,7 +118,7 @@ class TestGetLyrics:
         assert 'foo' in res
 
     def test_first_dont_match(self):
-        'first match should not match results that do not satisfies request'
+        '''first match should not match results that don't satisfies request'''
         pluginsystem.register_plugin(Quick)
         res = get_lyrics.get_lyrics('a', 'b', request=('donthaveit'),
                 analyzer='first_match')
@@ -127,7 +127,7 @@ class TestGetLyrics:
     @attr('slow')
     @every_parallel
     def test_slow_if_no_matches(self):
-        "when no matches are found, slowness is ok"
+        '''when no matches are found, slowness is ok'''
         pluginsystem.register_plugin(Slow)
         start = time.time()
         res = get_lyrics.get_lyrics('a', 'b', request=('foo',),
@@ -137,7 +137,7 @@ class TestGetLyrics:
     @attr('slow')
     @every_parallel
     def test_timeout(self):
-        "Timeout must do its job"
+        '''Timeout must do its job'''
         pluginsystem.register_plugin(Slow)
         pluginsystem.register_plugin(Quick)
         start = time.time()
