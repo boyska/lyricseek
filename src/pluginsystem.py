@@ -37,7 +37,7 @@ def _check_plugin(plugin):
     return True
 
 
-def register_plugin(name, plugin):
+def register_plugin(plugin):
     '''
     .. warning :: This is only intended for debug or dirty h4x.
         If unsure, you shouldn't use this
@@ -53,7 +53,7 @@ def register_plugin(name, plugin):
     '''
     if not _check_plugin(plugin):
         raise ValueError("Plugin check failed")
-    plugins[name] = plugin
+    plugins[plugin.name] = plugin
 
 
 def get_plugins():

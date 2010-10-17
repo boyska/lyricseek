@@ -103,7 +103,7 @@ def _first_match(request, results, response, best):
             response.put(current_best)
             return
         else:
-            print 'nooo', res, request, [x in res for x in request],\
+            print 'nooo', res, request, [x in res for x in request], \
                     current_best
 
 
@@ -142,6 +142,7 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
     def retriever_wrapper(name, retriever, results, finished):
         '''Call a retriever, handle its results'''
         def wrapped():
+            '''Provide transparent concurrency for retrievers'''
             finished.get()
             try:
                 res = retriever()

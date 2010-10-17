@@ -55,7 +55,7 @@ class TestCheck:
 
     def name_wrong_type_test(self):
         class NoName:
-            name = ['foo']  #this is not a string
+            name = ['foo']  # this is not a string
             features = ('foo',)
 
             def get_data(self):
@@ -69,5 +69,4 @@ class TestRegister:
         class Missing:
             name = 'foo'
             features = ('foo',)
-        pluginsystem.register_plugin('fooname', Missing)
-
+        pluginsystem.register_plugin(Missing)

@@ -102,16 +102,16 @@ class TestGetLyrics:
     def test_first_match(self):
         'first match analyzer should choose the quickest, and do it quick'
         #TODO: change to a more explicit, analyzer-choosing API
-        pluginsystem.register_plugin('quick', Quick)
-        pluginsystem.register_plugin('slow', Slow)
+        pluginsystem.register_plugin(Quick)
+        pluginsystem.register_plugin(Slow)
         res = get_lyrics.get_lyrics('a', 'b', request=('foo',),
                 analyzer='first_match')
         assert res['foo'] == 'quick foo'
 
     def test_first_advanced_match(self):
         '''first match should "compose" results'''
-        pluginsystem.register_plugin('quick', Quick)
-        pluginsystem.register_plugin('quick_bar', QuickBar)
+        pluginsystem.register_plugin(Quick)
+        pluginsystem.register_plugin(QuickBar)
         res = get_lyrics.get_lyrics('a', 'b', request=('foo', 'bar'),
                 analyzer='first_match')
         assert 'bar' in res
@@ -119,7 +119,7 @@ class TestGetLyrics:
 
     def test_first_dont_match(self):
         'first match should not match results that do not satisfies request'
-        pluginsystem.register_plugin('quick', Quick)
+        pluginsystem.register_plugin(Quick)
         res = get_lyrics.get_lyrics('a', 'b', request=('donthaveit'),
                 analyzer='first_match')
         assert res == None
@@ -128,7 +128,7 @@ class TestGetLyrics:
     @every_parallel
     def test_slow_if_no_matches(self):
         "when no matches are found, slowness is ok"
-        pluginsystem.register_plugin('slow', Slow)
+        pluginsystem.register_plugin(Slow)
         start = time.time()
         res = get_lyrics.get_lyrics('a', 'b', request=('foo',),
                 analyzer='first_match')
@@ -138,8 +138,8 @@ class TestGetLyrics:
     @every_parallel
     def test_timeout(self):
         "Timeout must do its job"
-        pluginsystem.register_plugin('slow', Slow)
-        pluginsystem.register_plugin('quick', Quick)
+        pluginsystem.register_plugin(Slow)
+        pluginsystem.register_plugin(Quick)
         start = time.time()
         res = get_lyrics.get_lyrics('a', 'b', request=('donthaveit'),
                 timeout=1)
@@ -151,14 +151,14 @@ class TestGetLyrics:
 
     def test_error_handling(self):
         '''Even when retrievers raise, all is fine'''
-        pluginsystem.register_plugin('error', Error)
+        pluginsystem.register_plugin(Error)
         get_lyrics.get_lyrics('a', 'b')
 
     @every_parallel
     def test_best_found(self):
         '''first_match must found the "best", even if not perfect'''
-        pluginsystem.register_plugin('slow', Slow)
-        pluginsystem.register_plugin('quick_bar', QuickBar)
+        pluginsystem.register_plugin(Slow)
+        pluginsystem.register_plugin(QuickBar)
         res = get_lyrics.get_lyrics('a', 'b', request=('foo', 'bar'),
                 timeout=0.5)
         assert 'bar' in res
@@ -167,7 +167,7 @@ class TestGetLyrics:
     @every_parallel
     def test_noone_is_fast_enough(self):
         '''when no retriever is fast enough, (None, None) should be returned'''
-        pluginsystem.register_plugin('slow', Slow)
+        pluginsystem.register_plugin(Slow)
         res = get_lyrics.get_lyrics('a', 'b', request=('foo',),
                 timeout=0.2)
         print 'NOONE', res
@@ -176,8 +176,8 @@ class TestGetLyrics:
     @attr('slow')
     def test_no_extra(self):
         '''Don't return anything that is not requested'''
-        pluginsystem.register_plugin('slow', Slow)
-        pluginsystem.register_plugin('quick_bar', QuickBar)
+        pluginsystem.register_plugin(Slow)
+        pluginsystem.register_plugin(QuickBar)
         res = get_lyrics.get_lyrics('a', 'b', request=('foo',))
         print 'result', res
         assert 'foo' in res
@@ -185,8 +185,8 @@ class TestGetLyrics:
 
     def test_useless_are_not_called(self):
         '''Retrievers which don't provide requested data are not called'''
-        pluginsystem.register_plugin('slow', Slow)
-        pluginsystem.register_plugin('trackable', Trackable)
+        pluginsystem.register_plugin(Slow)
+        pluginsystem.register_plugin(Trackable)
         get_lyrics.get_lyrics('a', 'b', request=('foo',), timeout=0.3)
         time.sleep(0.2)
         assert Trackable.called == False
