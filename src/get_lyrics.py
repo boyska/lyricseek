@@ -83,9 +83,9 @@ def _first_match(request, results, response, best):
         result = results.get()
         if result == 'finished':
             if current_best:
-                response.put((' ', current_best))
+                response.put(current_best)
             else:
-                response.put((None, None))
+                response.put(None)
             return
         name, status, res = result
         if status != 'ok':
@@ -100,7 +100,7 @@ def _first_match(request, results, response, best):
             best.get()
         #request is satisfied
         if False not in (x in current_best.keys() for x in request):
-            response.put((name, current_best))
+            response.put(current_best)
             return
         else:
             print 'nooo', res, request, [x in res for x in request],\
@@ -180,9 +180,9 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
         try:
             best_res = best.get_nowait()
         except Queue.Empty:
-            return (None, None)
+            return None
         else:
             print 'best I found:', best_res
-            return ('best', best_res)
+            return best_res
     else:
         return res

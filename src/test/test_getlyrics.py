@@ -106,7 +106,7 @@ class TestGetLyrics:
         pluginsystem.register_plugin('slow', Slow)
         res = get_lyrics.get_lyrics('a', 'b', request=('foo',),
                 analyzer='first_match')
-        assert res[0] == 'quick'
+        assert res['foo'] == 'quick foo'
 
     def test_first_advanced_match(self):
         '''first match should "compose" results'''
@@ -114,16 +114,15 @@ class TestGetLyrics:
         pluginsystem.register_plugin('quick_bar', QuickBar)
         res = get_lyrics.get_lyrics('a', 'b', request=('foo', 'bar'),
                 analyzer='first_match')
-        assert res[0] is not None
-        assert 'bar' in res[1]
-        assert 'foo' in res[1]
+        assert 'bar' in res
+        assert 'foo' in res
 
     def test_first_dont_match(self):
         'first match should not match results that do not satisfies request'
         pluginsystem.register_plugin('quick', Quick)
         res = get_lyrics.get_lyrics('a', 'b', request=('donthaveit'),
                 analyzer='first_match')
-        assert res[0] == None
+        assert res == None
 
     @attr('slow')
     @every_parallel
@@ -162,9 +161,8 @@ class TestGetLyrics:
         pluginsystem.register_plugin('quick_bar', QuickBar)
         res = get_lyrics.get_lyrics('a', 'b', request=('foo', 'bar'),
                 timeout=0.5)
-        assert res[0] is not None
-        assert 'bar' in res[1]
-        assert 'foo' not in res[1]
+        assert 'bar' in res
+        assert 'foo' not in res
 
     @every_parallel
     def test_noone_is_fast_enough(self):
@@ -173,8 +171,7 @@ class TestGetLyrics:
         res = get_lyrics.get_lyrics('a', 'b', request=('foo',),
                 timeout=0.2)
         print 'NOONE', res
-        assert res[0] is None
-        assert res[1] is None
+        assert res is None
 
     @attr('slow')
     def test_no_extra(self):
@@ -183,8 +180,8 @@ class TestGetLyrics:
         pluginsystem.register_plugin('quick_bar', QuickBar)
         res = get_lyrics.get_lyrics('a', 'b', request=('foo',))
         print 'result', res
-        assert 'foo' in res[1]
-        assert 'bar' not in res[1]
+        assert 'foo' in res
+        assert 'bar' not in res
 
     def test_useless_are_not_called(self):
         '''Retrievers which don't provide requested data are not called'''
