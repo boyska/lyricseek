@@ -1,3 +1,4 @@
+build/
 src/plugin_skeleton/build
 src/plugin_skeleton/dist
 src/plugin_skeleton/*.egg-info

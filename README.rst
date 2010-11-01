@@ -24,8 +24,8 @@ documentation in ``build/html/index.html``
 Install
 =======
 
-Package installation should be provided through a setup.py script, but it still
-is a TODO.
+Package installation is provided through "standard" setup.py script, so
+``python setup.py build; sudo python setup.py install`` should be enough
 
 Develop How-to
 ==============
