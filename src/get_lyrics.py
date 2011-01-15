@@ -71,7 +71,7 @@ def _get_analyzer(name):
     if name == 'first_match':
         return _first_match
     else:
-        raise ValueError('%s is not a valid analyzer')
+        raise ValueError('%s is not a valid analyzer' % name)
 
 
 def _first_match(request, results, response, best):
@@ -133,6 +133,8 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
     # even worse trick: every "improvement" analyzer does is written here,
     # and it tries to be the only value, so that main thread can just get()
     best = multiprocessing.Queue()
+    if analyzer is None:
+        analyzer = 'first_match'
     analyzer = multiprocessing.Process(target=_get_analyzer(analyzer),
             args=(request, results, response, best))
     analyzer.name = 'analyzer'
