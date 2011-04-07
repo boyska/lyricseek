@@ -60,6 +60,9 @@ def get_plugins():
     '''
     :returns: name:class dict of plugins (if loaded)
     '''
+    if not plugins:
+        load_plugins()
+    print 'now', plugins
     return plugins
 
 

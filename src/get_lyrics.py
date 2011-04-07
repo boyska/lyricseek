@@ -103,8 +103,8 @@ def _first_match(request, results, response, best):
             response.put(current_best)
             return
         else:
-            print 'nooo', res, request, [x in res for x in request], \
-                    current_best
+            print('nooo', res, request, [x in res for x in request], \
+                    current_best)
 
 
 def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
@@ -148,7 +148,7 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
             finished.get()
             try:
                 res = retriever()
-            except Exception, exc:
+            except Exception as exc:
                 results.put((name, 'error', exc))
             else:
                 results.put((name, 'ok', res))
@@ -178,14 +178,14 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
 
     try:
         res = response.get(block=True, timeout=timeout)
-    except Queue.Empty:
-        print 'no response'
+    except Queue.Empty as exc:
+        print('no response')
         try:
             best_res = best.get_nowait()
         except Queue.Empty:
             return None
         else:
-            print 'best I found:', best_res
+            print('best I found:', best_res)
             return best_res
     else:
         return res

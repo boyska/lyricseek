@@ -1,11 +1,14 @@
+import re
+import urllib2
+
 class lysk(object):
     name = 'lysk'
-    features = ('lyrics')
+    features = ('lyrics', )
 
     @staticmethod
     def get_data(song_metadata, option):
-        MARKER_STARTLYRICS = '&lt;lyrics&gt;'
-        MARKER_STOPLYRICS = '&lt;/lyrics&gt;'
+        MARKER_STARTLYRICS = '&lt;lyrics>'
+        MARKER_STOPLYRICS = '&lt;/lyrics>'
         MARKER_NOLYRICS = 'PUT LYRICS HERE'
         # normalize the titiles for lwiki
         artist = song_metadata['artist']
@@ -17,28 +20,23 @@ class lysk(object):
         pat = re.compile(lyrics_re, re.S|re.I|re.M)
 
         lyrics = ""
-        print artist
-        print song
         _url = "http://lyrics.wikia.com/index.php?title=%s:%s&action=edit" % \
                 (artist, song)
 
         page = urllib2.urlopen(_url).read()
+        if not page:
+            raise Exception('Errors occured; nothing found')
         result = pat.findall(page)
         if result:
             lyrics = result[0]
+        else:
+            raise Exception('Errors while parsing')
         if lyrics.find(MARKER_NOLYRICS) > -1:
             lyrics = ""
         return {'lyrics':lyrics}
 
 if __name__ == '__main__':
-    import types
     import sys
-    import urllib2
-    import re
-
-
-    retr = [cls for name, cls in  locals().items() if
-            type(cls) is types.TypeType and name.endswith('Retriever')][0]
     artist = sys.argv[1]
     song = sys.argv[2]
     retr.get_data({'title':song, 'artist': artist}, {})
