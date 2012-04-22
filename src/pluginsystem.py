@@ -62,7 +62,6 @@ def get_plugins():
     '''
     if not plugins:
         load_plugins()
-    print 'now', plugins
     return plugins
 
 

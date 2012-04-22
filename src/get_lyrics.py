@@ -52,7 +52,7 @@ def get_ready_retrievers(artist=None, album=None, title=None, otherinfo=None, \
         song_metadata['title'] = title
 
     options = {}
-    options['searching'] = request or ('lyrics', 'coverart')
+    options['searching'] = request
 
     for name, plugin in pluginsystem.get_plugins().items():
         if set(plugin.features).intersection(set(request)):
