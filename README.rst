@@ -18,8 +18,11 @@ Documentation
 =============
 
 Main documentation is available in doc/ directory.
-You just need to execute ``make clean coverage html`` and you'll nice
-documentation in ``build/html/index.html``
+You can find documentation for boyska/lyricseek repository on github on
+http://readthedocs.org/docs/lyricseek/en/latest/index.html
+
+If you want to build it yourself,you just need to execute 
+``make clean coverage html`` and you'll get nice documentation in ``build/html/index.html``
 
 Install
 =======
