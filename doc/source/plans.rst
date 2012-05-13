@@ -16,6 +16,11 @@ This is a sort of project of what the library should look like when finished.
     Just do it.
   * ``get_lyrics_fastest(... as above ...)``
     The first site to give an 'OK' will return
+  * ``get_lyrics(... plugins=('this', 'that'))``
+
+    the user is able to "filter" from the set of plugins: this way
+    badly-behaving plugins can be avoided without uninstalling them
+
   * .. todo :: ``get_lyrics_best(... as above ...)``
 
     Try to catch as much information as possible
@@ -27,7 +32,6 @@ This is a sort of project of what the library should look like when finished.
     will automatically
     discover album, artist, title information using file metadata. This will
     work, however, only if eyed3 is installed
-
 * It's not limited to lyrics, but supports artist info, cover, tabs, whatsoever
 * Extensibility is provided through eggs
 

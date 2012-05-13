@@ -28,10 +28,10 @@ def set_parallel(method):
 
 
 def get_ready_retrievers(artist=None, album=None, title=None, otherinfo=None, \
-        request=(), timeout=-1, filename=None):
+        request=(), timeout=-1, filename=None, filter_=None):
     '''
     .. note :: this is not meant to be used by the casual user. Use it if
-      you are a developer or if you really do what you're doing
+      you are a developer or if you really know what you're doing
 
     This function will return an iterator over functions that take no arguments
     and will try to get data (that is, retrievers with arguments filled in)
@@ -55,6 +55,8 @@ def get_ready_retrievers(artist=None, album=None, title=None, otherinfo=None, \
     options['searching'] = request
 
     for name, plugin in pluginsystem.get_plugins().items():
+        if filter_ is not None and name not in filter_:
+            continue
         if set(plugin.features).intersection(set(request)):
             yield name, functools.partial(
                     plugin.get_data, song_metadata, options)
@@ -108,7 +110,8 @@ def _first_match(request, results, response, best):
 
 
 def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
-        request=(), timeout=None, filename=None, analyzer='first_match'):
+        request=(), timeout=None, filename=None, analyzer='first_match', 
+        plugin_filter=None):
     '''
     Simply get lyrics
 
@@ -158,7 +161,7 @@ def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
 
     processes = []
     for name, retriever in get_ready_retrievers(artist, album, title, \
-            otherinfo, request, timeout, filename):
+            otherinfo, request, timeout, filename, filter_=plugin_filter):
         finished.put(True)
         wrapped_retriever = retriever_wrapper(
                 name, retriever, results, finished)

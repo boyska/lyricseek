@@ -35,7 +35,7 @@ class Quick:
 
 class QuickBar:
     name = 'quick_bar'
-    features = ('foo',)
+    features = ('bar',)
 
     @staticmethod
     def get_data(*args, **kwargs):
@@ -43,7 +43,7 @@ class QuickBar:
         return{'bar': 'quickBar bar'}
 
 
-class Trackable:
+class Trackable(object):
     name = 'trackable'
     features = ('bar',)
     called = False
@@ -115,12 +115,14 @@ class TestGetLyrics:
         res = get_lyrics.get_lyrics('a', 'b', request=('foo', 'bar'),
                 analyzer='first_match')
         assert 'bar' in res
+        assert res['bar'] == 'quickBar bar'
         assert 'foo' in res
+        assert res['foo'] == 'quick foo'
 
     def test_first_dont_match(self):
         '''first match should not match results that don't satisfies request'''
         pluginsystem.register_plugin(Quick)
-        res = get_lyrics.get_lyrics('a', 'b', request=('donthaveit'),
+        res = get_lyrics.get_lyrics('a', 'b', request=('donthaveit',),
                 analyzer='first_match')
         assert res == None
 
@@ -190,3 +192,21 @@ class TestGetLyrics:
         get_lyrics.get_lyrics('a', 'b', request=('foo',), timeout=0.3)
         time.sleep(0.2)
         assert Trackable.called == False
+
+class TestFilter:
+    @timed('.5')
+    def test_none(self):
+        pluginsystem.register_plugin(Slow)
+        get_lyrics.get_lyrics('a', 'b', request=('foo',), plugin_filter=())
+
+    @timed('.5')
+    def test_select(self):
+        pluginsystem.register_plugin(Slow)
+        pluginsystem.register_plugin(Quick)
+        get_lyrics.get_lyrics('a', 'b', request=('foo',), plugin_filter=('quick',))
+
+    def test_all(self):
+        pluginsystem.register_plugin(Slow)
+        pluginsystem.register_plugin(Quick)
+        get_lyrics.get_lyrics('a', 'b', request=('foo',))
+

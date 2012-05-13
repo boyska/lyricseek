@@ -1,0 +1,11 @@
+"Per-dir vim config
+
+autocmd BufRead *.vimdir setlocal filetype=vim
+let g:pyflakes_use_quickfix=1
+compiler nose
+
+function! BgMake()
+	compiler nose
+	make
+	copen 20
+endfunction
