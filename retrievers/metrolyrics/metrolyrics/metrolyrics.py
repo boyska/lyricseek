@@ -37,7 +37,10 @@ class MetroLyrics(object):
         page = lxml.html.parse(content)
         div = page.getroot().get_element_by_id('lyrics-body')
         text = ''.join([text for text in div.itertext()])
-        return text
+        if (text.strip('\r\n\t')).startswith("We are not in a position to display"):
+            raise RuntimeError("Licensing Problem")
+        else:
+            return text
 
 if __name__ == '__main__':
     print MetroLyrics.get_data({'artist':'coldplay', 'title':'paradise'}, {})
