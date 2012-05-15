@@ -63,13 +63,3 @@ def get_plugins():
     if not plugins:
         load_plugins()
     return plugins
-
-
-def get_plugin_features(name):
-    '''
-    :returns: supported features (see :ref:`retrievers`)
-    :rtype: tuple of strings
-    '''
-    if not name in plugins:
-        raise ValueError
-    return plugins[name].features
