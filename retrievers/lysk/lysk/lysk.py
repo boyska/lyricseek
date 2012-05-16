@@ -11,8 +11,8 @@ class lysk(object):
         MARKER_STOPLYRICS = '&lt;/lyrics>'
         MARKER_NOLYRICS = 'PUT LYRICS HERE'
         # normalize the titiles for lwiki
-        artist = song_metadata['artist']
-        song = song_metadata['title']
+        artist = song_metadata['artist'].lower
+        song = song_metadata['title'].lower
         artist = artist.replace(' ', '_')
         song = song.replace(' ', '_')
 
