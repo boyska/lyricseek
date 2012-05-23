@@ -7,7 +7,7 @@ import multiprocessing
 from multiprocessing import dummy as _multiprocdummy
 import Queue
 
-import pluginsystem
+import _pluginsystem as pluginsystem
 
 _multiproc = multiprocessing  # "back-up" of the module, see set_parallel
 
@@ -109,11 +109,11 @@ def _first_match(request, results, response, best):
                     current_best)
 
 
-def get_lyrics(artist=None, album=None, title=None, otherinfo=None, \
+def get_data(artist=None, album=None, title=None, otherinfo=None, \
         request=(), timeout=None, filename=None, analyzer='first_match', 
         plugin_filter=None):
     '''
-    Simply get lyrics
+    Get data about a song
 
     :param otherinfo: Other metadata, not worthing a function parameter
     :type otherinfo: dict

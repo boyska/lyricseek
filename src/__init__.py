@@ -1,2 +1,3 @@
-import get_lyrics
-import pluginsystem
+__all__ = ['get']
+from _run import get_data as get
+#import pluginsystem

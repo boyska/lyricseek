@@ -3,7 +3,7 @@ Current status
 
 The pluginsystem is basic, but OK.
 
-``get_lyrics`` seems to work.
+``get`` seems to work.
 
 A plugin skeleton (with a short HOWTO in it) has been written and seems to
 work; it still misses some features, though.

@@ -8,9 +8,9 @@ def CommandLineLS(song_metadata):
 
 
     try:
-        song_metadata['lyrics'] = lyricseek.get_lyrics.get_lyrics(
+        song_metadata.update(lyricseek.get(
                 artist=song_metadata['artist'], title=song_metadata['title'],
-                request=('lyrics',))
+                request=('lyrics',)))
         print(song_metadata['lyrics'])
     except IOError:
         print "Errore nella ricerca dei testi"
@@ -20,6 +20,6 @@ def CommandLineLS(song_metadata):
 if __name__ == '__main__':
 
 
-    song_metadata = {'artist':sys.argv[1], 'title':sys.argv[2], 'lyrics':'none', 'artwork':'none'}
+    song_metadata = {'artist':sys.argv[1], 'title':sys.argv[2]}
 
-    CommandLineLS(song_metadata)
+    sys.exit(CommandLineLS(song_metadata))

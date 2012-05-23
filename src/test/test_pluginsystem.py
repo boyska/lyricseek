@@ -1,6 +1,6 @@
 from nose.tools import assert_false, raises
 
-import pluginsystem
+import _pluginsystem as pluginsystem
 
 
 class TestCheck:
