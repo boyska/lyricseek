@@ -1,0 +1,7 @@
+env = Environment()
+env.ParseConfig('python2.7-config --includes --libs --cflags')
+env.SharedLibrary('lyricseek', source=['lyricseek.c'])
+env.Program(target='lyricseek_test', source=['test.c'],
+        LIBS=['lyricseek', 'python2.7'], LIBPATH='.')
+
+# vim: set ft=python:
