@@ -180,8 +180,8 @@ def get_data(artist=None, album=None, title=None, otherinfo=None, \
     w.start()
 
     try:
-        res = response.get(block=True, timeout=timeout)
-    except Queue.Empty as exc:
+        res = response.get(block=True, timeout=timeout if timeout >0 else None)
+    except Queue.Empty:
         print('no response')
         try:
             best_res = best.get_nowait()
