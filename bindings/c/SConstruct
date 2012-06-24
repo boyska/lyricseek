@@ -1,4 +1,5 @@
-env = Environment()
+#TODO: DEBUGGING should only be set basing on shell variables
+env = Environment(CPPDEFINES={'DEBUGGING':None})
 env.ParseConfig('python2.7-config --includes --libs --cflags')
 env.SharedLibrary('lyricseek', source=['lyricseek.c'])
 env.Program(target='lyricseek_test', source=['test.c'],
